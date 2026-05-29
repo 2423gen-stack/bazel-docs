@@ -40,11 +40,12 @@ The preview workflow (`preview-bazel-docs-pr.yml`) polls `bazelbuild/bazel` ever
 | `BUILDBUDDY_ORG_API_KEY` | BuildBuddy API key for remote caching during `bazel build` | BuildBuddy org |
 
 Posting preview comments on `bazelbuild/bazel` is done with a dedicated, least-privilege
-GitHub App rather than a personal access token (PATs are tied to a human and are
-discouraged for service accounts). The App must be installed on `bazelbuild/bazel` by a
-Bazel org owner — see [`.github/SETUP-pr-commenter-app.md`](.github/SETUP-pr-commenter-app.md).
-Until that installation is approved, previews still build and the comment step skips
-gracefully (it logs the URL it would have posted).
+GitHub App ("Bazel Docs PR Commenter") rather than a personal access token (PATs are tied
+to a human and are discouraged for service accounts). The App needs only `Issues: read &
+write` on `bazelbuild/bazel` (a PR conversation comment is created via the issue-comments
+REST endpoint), and must be installed on that repo by a Bazel org owner. Until the
+installation is approved, previews still build and the comment step skips gracefully (it
+logs the URL it would have posted).
 
 ### Mintlify Configuration
 
