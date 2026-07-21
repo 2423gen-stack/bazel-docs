@@ -1,5 +1,8 @@
 name: Preview Bazel docs PRs
 on:
+  push:
+    branches:
+      - main
   # Since PRs to Bazel repo may come from a fork, and those cannot see GHA Secrets,
   # we fall back to polling the Bazel repo for new PRs.
   schedule:
