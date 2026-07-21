@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'Specific bazelbuild/bazel PR number to preview (skips polling, useful for testing)'
+        description: 'Specific 2423gen-stack/bazel PR number to preview (skips polling, useful for testing)'
         required: false
         type: string
         default: ''
@@ -40,7 +40,7 @@ jobs:
             pr="$(gh api \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/repos/bazelbuild/bazel/pulls/${PR_NUMBER_OVERRIDE}")"
+              "/repos/2423gen-stack/bazel/pulls/${PR_NUMBER_OVERRIDE}")"
             matrix="$(echo "$pr" | jq -c '[{
               number: .number,
               head_sha: .head.sha,
@@ -54,7 +54,7 @@ jobs:
             prs="$(gh api \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/repos/bazelbuild/bazel/pulls?state=open&sort=updated&direction=desc&per_page=100")"
+              "/repos/2423gen-stack/bazel/pulls?state=open&sort=updated&direction=desc&per_page=100")"
             matrix="$(echo "$prs" | jq -c --arg since "$since" '
               [
                 .[] | select(.updated_at >= $since) |
@@ -137,7 +137,7 @@ jobs:
 
               # Extract parse errors only for files changed in the upstream PR
               all_parse_errors=$(echo "$check" | jq -r '.output.text // ""' | grep "^Failed to parse" || true)
-              changed_docs=$(gh api "/repos/bazelbuild/bazel/pulls/${PR_NUMBER}/files" \
+              changed_docs=$(gh api "/repos/2423gen-stack/bazel/pulls/${PR_NUMBER}/files" \
                 --jq '[.[] | .filename | select(startswith("docs/")) | ltrimstr("docs/")] | .[]' 2>/dev/null || true)
               relevant_errors=""
               while IFS= read -r file; do
@@ -164,7 +164,7 @@ jobs:
       - name: Post or update preview comment
         if: ${{ steps.mintlify.outputs.conclusion != 'skipped' }}
         env:
-          # BAZELBUILD_BAZEL_PAT is required to post comments on bazelbuild/bazel PRs.
+          # BAZELBUILD_BAZEL_PAT is required to post comments on 2423gen-stack/bazel PRs.
           # github.token is used as a fallback for read-only access to this repo.
           GH_TOKEN: ${{ secrets.BAZELBUILD_BAZEL_PAT }}
           PREVIEW_URL: https://bazel-${{ matrix.preview_branch }}.mintlify.app/
@@ -229,13 +229,13 @@ jobs:
           )
           fi
 
-          existing_id="$(gh api "/repos/bazelbuild/bazel/issues/${PR_NUMBER}/comments" \
+          existing_id="$(gh api "/repos/2423gen-stack/bazel/issues/${PR_NUMBER}/comments" \
             --jq "map(select(.body | contains(\"${marker}\")))[0].id // empty")"
 
           if [[ -n "${existing_id}" ]]; then
-            gh api -X PATCH "/repos/bazelbuild/bazel/issues/comments/${existing_id}" -f body="${body}"
+            gh api -X PATCH "/repos/2423gen-stack/bazel/issues/comments/${existing_id}" -f body="${body}"
           else
-            gh api -X POST "/repos/bazelbuild/bazel/issues/${PR_NUMBER}/comments" -f body="${body}"
+            gh api -X POST "/repos/2423gen-stack/bazel/issues/${PR_NUMBER}/comments" -f body="${body}"
           fi
 
   cleanup:
@@ -262,8 +262,8 @@ jobs:
           for pr_number in $(echo "$branches" | jq -r '.[] | ltrimstr("pr-")'); do
             branch="pr-${pr_number}"
 
-            # Check if the upstream bazelbuild/bazel PR is still open
-            state=$(GH_TOKEN="${BAZELBUILD_TOKEN}" gh api "repos/bazelbuild/bazel/pulls/${pr_number}" \
+            # Check if the upstream 2423gen-stack/bazel PR is still open
+            state=$(GH_TOKEN="${BAZELBUILD_TOKEN}" gh api "repos/2423gen-stack/bazel/pulls/${pr_number}" \
               --jq '.state' 2>/dev/null || echo "not_found")
 
             if [[ "$state" == "open" ]]; then
