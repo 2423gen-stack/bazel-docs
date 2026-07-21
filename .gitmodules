@@ -1,4 +1,4 @@
 [submodule "upstream"]
 	path = upstream
-	url = https://github.com/bazelbuild/bazel.git
+	url = https://github.com/2423gen-stack/bazel.git
 	branch = master
