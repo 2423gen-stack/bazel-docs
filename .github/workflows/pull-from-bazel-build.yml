@@ -264,8 +264,8 @@ jobs:
               --repo "${{ github.repository }}" \
               --head "${PREVIEW_BRANCH}" \
               --base "${DEFAULT_BRANCH}" \
-              --title "docs preview: bazelbuild/bazel#${PR_NUMBER}" \
-              --body "Auto-generated Mintlify preview for [bazelbuild/bazel#${PR_NUMBER}](https://github.com/bazelbuild/bazel/pull/${PR_NUMBER})." \
+              --title "docs preview: 2423gen-stack/bazel#${PR_NUMBER}" \
+              --body "Auto-generated Mintlify preview for [2423gen-stack/bazel#${PR_NUMBER}](https://github.com/2423gen-stack/bazel/pull/${PR_NUMBER})." \
               --draft
             echo "Draft PR created for ${PREVIEW_BRANCH}"
           else
